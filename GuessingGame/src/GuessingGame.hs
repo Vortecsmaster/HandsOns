@@ -1,18 +1,19 @@
-{-# LANGUAGE DataKinds           #-}
-{-# LANGUAGE DeriveAnyClass      #-}
-{-# LANGUAGE DeriveGeneric       #-}
-{-# LANGUAGE FlexibleContexts    #-}
-{-# LANGUAGE NoImplicitPrelude   #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE TypeApplications    #-}
-{-# LANGUAGE TypeFamilies        #-}
-{-# LANGUAGE TypeOperators       #-}
-{-# LANGUAGE DerivingStrategies  #-}
-{-# LANGUAGE ImportQualifiedPost  #-}
+{-# LANGUAGE DataKinds                   #-}
+{-# LANGUAGE DeriveAnyClass              #-}
+{-# LANGUAGE DeriveGeneric               #-}
+{-# LANGUAGE FlexibleContexts            #-}
+{-# LANGUAGE NoImplicitPrelude           #-}
+{-# LANGUAGE OverloadedStrings           #-}
+{-# LANGUAGE ScopedTypeVariables         #-}
+{-# LANGUAGE TemplateHaskell             #-}
+{-# LANGUAGE TypeApplications            #-}
+{-# LANGUAGE TypeFamilies                #-}
+{-# LANGUAGE TypeOperators               #-}
+{-# LANGUAGE DerivingStrategies          #-}
+{-# LANGUAGE ImportQualifiedPost         #-}
+{-# LANGUAGE TupleSections               #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving  #-}
-{-# LANGUAGE MultiParamTypeClasses  #-}
+{-# LANGUAGE MultiParamTypeClasses       #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 module GuessingGame where
@@ -27,6 +28,7 @@ import Data.Maybe (catMaybes)
 import Ledger (Address, Datum (Datum), ScriptContext, Validator, Value, getCardanoTxId)
 import Ledger qualified
 import Ledger.Ada qualified as Ada
+import Ledger.Value qualified as Value
 import Ledger.Constraints qualified as Constraints
 import Ledger.Tx (ChainIndexTxOut (..))
 import Ledger.Typed.Scripts qualified as Scripts
@@ -132,4 +134,17 @@ endpoints = awaitPromise (theBlind' `select` theGuess') >> endpoints
 mkSchemaDefinitions ''GameSchema
 mkKnownCurrencies []
 
+--SIMULATION
 
+test :: IO ()
+test = runEmulatorTraceIO $ do
+    h1 <- activateContractWallet (knownWallet 1) endpoints
+    h2 <- activateContractWallet (knownWallet 2) endpoints
+    callEndpoint @"theBlind" h1 $ BP 
+                   { theSecret = "TheSecret"
+                   , value     = Ada.lovelaceValueOf 10000000
+                   }
+    void $ Emulator.waitNSlots 10
+    callEndpoint @"theGuess" h2 $ GP 
+                   { guessSecret = "TheSecret" }
+    void $ Emulator.waitNSlots 10

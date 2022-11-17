@@ -7,8 +7,8 @@ module Deploy
     , writeUnit
     , writeDatum
     , writeRedeemer
-    , badRedeemer
-    , writeBountyValidator
+    , writeBadRedeemer
+    , writeGGValidator
     ) where
 
 import           Cardano.Api
@@ -40,13 +40,13 @@ writeUnit :: IO ()
 writeUnit = writeJSON "testnet/unit.json" ()
 
 writeDatum :: IO ()
-writeDatum = writeJSON "testnet/datum.json" (MBD 100)
+writeDatum = writeJSON "testnet/datum.json" (hashString "TheSecret")
 
 writeRedeemer :: IO ()
-writeRedeemer = writeJSON "testnet/goodRedeemer.json" (10::Integer)
+writeRedeemer = writeJSON "testnet/goodRedeemer.json" (clearString "TheSecret" )
 
 writeBadRedeemer :: IO ()
-writeBadRedeemer = writeJSON "testnet/badRedeemer.json" (7::Integer)
+writeBadRedeemer = writeJSON "testnet/badRedeemer.json" (clearString "TheWrongSecret" )
 
-writeBountyValidator :: IO (Either (FileError ()) ())
-writeBountyValidator = writeValidator "testnet/guessingGame.plutus" $ validator
+writeGGValidator :: IO (Either (FileError ()) ())
+writeGGValidator = writeValidator "testnet/guessingGame.plutus" $ gameValidator
