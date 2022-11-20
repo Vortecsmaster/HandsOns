@@ -9,7 +9,7 @@ Summary:
 
 ## Part 1 Prepare the elements necessary Transaction construction 
 
-What do we need?
+What do we need?****
 
 * A working Plutus Developer Environment Nix-Shell
 * 1 paymentAddresses with some UTxO with ADA for providing Bounty Value.
@@ -22,26 +22,28 @@ What do we need?
 ## Part 2 Serializing and encoding 
 
 ###### STEP 1
-    Run your NIX-SHELL
+    Clone or Pull the handsOn repository
+    git clone  https://github.com/Vortecsmaster/HandsOns.git
+
 
 ###### STEP 2
-In the your MathBountyTestnet folder execute 
+    Run your NIX-SHELL
+
+###### STEP 3
+In the your GuessingGame folder execute 
 
     cabal repl
 
-###### STEP 3
-On the REPL, Evaluate the functions on the Deploy module
+###### STEP 4
+On the REPL, Evaluate the functions on the Deploy module (load it if its not loaded)
 
     writeUnit
     writeDatum
     writeRedeemer
     writeBadRedeemer
-    writeBountyValidator
+    writeGGValidator
 
-This is going to create the corresponding encoded/serialized files for unit, datum, goodRedeeer, badRedeemer and mathBounty.plutus
+This is going to create the corresponding encoded/serialized files for unit, datum, goodRedeeer, badRedeemer and onChain validator.
 
-###### STEP 3
-
-
- **Fund the payment address with 10000 Test Ada from the Faucet (https://testnets.cardano.org/en/testnets/cardano/tools/faucet/)**
+###### STEP 5 
 

@@ -10,8 +10,8 @@ category:           Education
 extra-source-files: CHANGELOG.md
 
 library
-    exposed-modules:  GuessingGameO
-                      , Deploy
+    exposed-modules:  Deploy
+                      , GuessingGameO
                       
     build-depends:    base ^>=4.14.1.0
                       , aeson -any
