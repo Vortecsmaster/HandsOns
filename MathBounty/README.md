@@ -2,7 +2,7 @@
 eMurgo Academy Live session excercises
 
 
-# TestNet Execution - Guessing Game contract
+# TestNet Execution - MathBouty contract
 
 Summary:
 > This exercise is going to walkthrough in executing a smart contract on a testnet, by serializing the different requirements for the transaction construction and finally constructing and submitting your transaction for execution using Cardano-CLI.
@@ -14,7 +14,7 @@ What do we need?****
 * A working Plutus Developer Environment Nix-Shell
 * 1 paymentAddresses with some UTxO with ADA for providing Bounty Value.
 * 1 paymentAddress with a UTxO with ADA **ONLY** for providing collateral. (Could be the same payment address)
-* 1 paymentAddress for the counterpart that try to guess the secret and get the bounty.
+* 1 paymentAddress for the counterpart that try to guess the solution and get the bounty.
 * Validator Script (Serialized and JSON encoded)
 * Datum (JSON encoded)
 * Redeemer (JSON encoded)
