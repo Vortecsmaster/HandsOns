@@ -26,7 +26,7 @@ What do we need?
     Run your NIX-SHELL
 
 ###### STEP 3
-In the your GuessingGame folder execute 
+In the your MathBounty folder execute 
 
     cabal repl
 
@@ -48,7 +48,7 @@ In your testnet folder edit theBounty.sh
      --babbage-era \
      --testnet-magic 2 \
      --tx-in 5adfacd59c7d94d459d8d0117fc1d61e4aa7416df2641b3fc8bd9903a0c23275#0 \
-     --tx-out $(cat guessingGame.addr)+50000000\
+     --tx-out $(cat mathBounty.addr)+50000000\
      --tx-out-datum-hash-file datum.json \
      --change-address $Adr01 \
      --out-file tx.unsigned
