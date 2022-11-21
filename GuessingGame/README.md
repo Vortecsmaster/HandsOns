@@ -1,14 +1,12 @@
 # HandsOns
 eMurgo Academy Live session excercises
 
-
 # TestNet Execution - Guessing Game contract
 
 Summary:
 > This exercise is going to walkthrough in executing a smart contract on a testnet, by serializing the different requirements for the transaction construction and finally constructing and submitting your transaction for execution using Cardano-CLI.
 
 ## Part 1 Prepare the elements necessary Transaction construction 
-
 What do we need?
 
 * A working Plutus Developer Environment Nix-Shell
@@ -19,9 +17,7 @@ What do we need?
 * Datum (JSON encoded)
 * Redeemer (JSON encoded)
 
-
 ## Part 2 Serializing and encoding 
-
 ###### STEP 1
     Clone or Pull the handsOn repository
     ```

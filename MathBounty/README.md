@@ -18,11 +18,9 @@ What do we need?
 * Redeemer (JSON encoded)
 
 ## Part 2 Serializing and encoding 
-
 ###### STEP 1
     Clone or Pull the handsOn repository
     git clone  https://github.com/Vortecsmaster/HandsOns.git
-
 
 ###### STEP 2
     Run your NIX-SHELL
@@ -68,7 +66,7 @@ Execute the command
      --babbage-era \
      $PREPROD \
      --tx-in 7e31cead428867928d256baf182499bb378907480c40d8425947867b77937334#1 \
-     --tx-in-script-file ./guessingGame.plutus \
+     --tx-in-script-file ./mathBounty.plutus \
      --tx-in-datum-file ./datum.json \
      --tx-in-redeemer-file ./goodRedeemer.json \
      --required-signer-hash 697a501b7d05766b3d08e39dab43e0f170973d3398b28745b3b8ce55 \
