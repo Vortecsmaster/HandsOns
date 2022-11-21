@@ -64,7 +64,7 @@ Execute the command
 ```
     cardano-cli transaction build \
      --babbage-era \
-     $PREPROD \
+     --testnet-magic 2 \
      --tx-in 7e31cead428867928d256baf182499bb378907480c40d8425947867b77937334#1 \
      --tx-in-script-file ./mathBounty.plutus \
      --tx-in-datum-file ./datum.json \
@@ -80,11 +80,11 @@ Execute the command
     cardano-cli transaction sign \
      --tx-body-file tx.body \
      --signing-key-file ./Wallet/Adr07.skey \
-     $PREPROD \
+     --testnet-magic 2 \
      --out-file tx.signed
 
     cardano-cli transaction submit \
-     $PREPROD \
+     --testnet-magic 2 \
      --tx-file tx.signed
 ``` 
 
