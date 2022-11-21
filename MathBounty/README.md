@@ -51,7 +51,7 @@ In your testnet folder edit theBlind.sh
 ```
     cardano-cli transaction build \
      --babbage-era \
-     --$PREPROD \
+     --testnet-magic 2 \
      --tx-in 5adfacd59c7d94d459d8d0117fc1d61e4aa7416df2641b3fc8bd9903a0c23275#0 \
      --tx-out $(cat guessingGame.addr)+50000000\
      --tx-out-datum-hash-file datum.json \
