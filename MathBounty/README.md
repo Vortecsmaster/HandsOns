@@ -42,7 +42,7 @@ On the REPL, Evaluate the functions on the Deploy module (load it if its not loa
 This is going to create the corresponding encoded/serialized files for unit, datum, goodRedeeer, badRedeemer and onChain validator.
 
 ###### STEP 5 
-In your testnet folder edit theBlind.sh
+In your testnet folder edit theBounty.sh
 ```
     cardano-cli transaction build \
      --babbage-era \
@@ -57,10 +57,11 @@ In your testnet folder edit theBlind.sh
 ###### STEP 6
 Execute the command
 ```  
-     ./theBlind.sh
+     ./theBounty.sh
 ``` 
 
 ###### STEP 7
+In your testnet folder edit theSolution.sh
 ```
     cardano-cli transaction build \
      --babbage-era \
@@ -91,5 +92,5 @@ Execute the command
 ###### STEP 6
 Execute the command
 ``` 
-     ./theBlind.sh
+     ./theSolution.sh
 ```
