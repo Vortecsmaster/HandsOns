@@ -9,12 +9,12 @@ Summary:
 
 ## Part 1 Prepare the elements necessary Transaction construction 
 
-What do we need?****
+What do we need?
 
 * A working Plutus Developer Environment Nix-Shell
 * 1 paymentAddresses with some UTxO with ADA for providing Bounty Value.
 * 1 paymentAddress with a UTxO with ADA **ONLY** for providing collateral. (Could be the same payment address)
-* 1 paymentAddress for the counterpart that try to guess the secret and get the bounty.
+* 1 paymentAddress for the counterpart that try to guess the secret and get the reward.
 * Validator Script (Serialized and JSON encoded)
 * Datum (JSON encoded)
 * Redeemer (JSON encoded)
@@ -24,16 +24,18 @@ What do we need?****
 
 ###### STEP 1
     Clone or Pull the handsOn repository
+    ```
     git clone  https://github.com/Vortecsmaster/HandsOns.git
-
+    ```
 
 ###### STEP 2
     Run your NIX-SHELL
 
 ###### STEP 3
 In the your GuessingGame folder execute 
-
+```
     cabal repl
+```
 
 ###### STEP 4
 On the REPL, Evaluate the functions on the Deploy module (load it if its not loaded)
@@ -47,14 +49,13 @@ On the REPL, Evaluate the functions on the Deploy module (load it if its not loa
 This is going to create the corresponding encoded/serialized files for unit, datum, goodRedeeer, badRedeemer and onChain validator.
 
 
-
 ###### STEP 5 
 Build the scriptAddress
-
 ```
 cardano-cli address build --payment-script-file guessingGame.plutus --testnet-magic 2 --out-file guessingGame.addr
 ```
-###### STEP 5 
+
+###### STEP 6 
 In your testnet folder edit theBlind.sh
 ```
     cardano-cli transaction build \
@@ -72,6 +73,7 @@ Execute the command
 ```
 ./theBlind.sh
 ```
+
 ###### STEP 8
 Query the contract script address for the UTxO created by theBlind
 ```
