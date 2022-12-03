@@ -1,24 +1,36 @@
+utxoin="612f766282d47b091e3c7372405a3728d752e918ea79251db456d367bbac5ddb#0"
+funds="25000000"
+policyid=$(cat policy.id)
+address=$(cat Wallet/Adr01.addr)
+output="5000000"
+tokenamount="1"
+tokenname=$(echo -n "myWonderfullNFT" | xxd -ps | tr -d '\n')
+collateral="4cbf990857530696a12b0062546a4b123ad0bef21c67562e32d03e3288bdcd7b#0"
+signerPKH="697a501b7d05766b3d08e39dab43e0f170973d3398b28745b3b8ce55"
+
 cardano-cli transaction build \
-    --babbage-era \
-    $PREPROD \
-    --tx-in 83942cb31414d901dda39eea5509f36c7b1f68b034d5f75a2d810b7730abe21b#1 \
-    --required-signer-hash 8fd2af318fe6fd7a8b2f56861b7dda312411281616b902953abf7121 \
-    --tx-in-collateral 7e31cead428867928d256baf182499bb378907480c40d8425947867b77937334#0 \
-    --tx-out $nami+
-    --change-address $Adr01 \
-    --mint "1 7eb3e40169a94722ba58dcb4ec45103b26c65c13b8c700d52d54bc2b.576f6e646572436f696e" \
-    --mint-script-file nft-mint-V2.plutus \
-    --mint-redeemer-file unit.json \
-    --protocol-params-file protocol.params \
-    --out-file tx.unsigned \
+  --babbage-era \
+  $PREVIEW \
+  --tx-in $utxoin \
+  --required-signer-hash $signerPKH \
+  --tx-in-collateral $collateral \
+  --tx-out $address+$output+"$tokenamount $policyid.$tokenname" \
+  --change-address $Adr01 \
+  --mint "$tokenamount $policyid.$tokenname" \
+  --mint-script-file nftMintV2.plutus \
+  --mint-redeemer-file unit.json \
+  --invalid-hereafter 3371469 \
+  --protocol-params-file protocol.params \
+  --out-file mintTx.body
 
 
 cardano-cli transaction sign \
-    --tx-body-file tx.unsigned \
+    --tx-body-file mintTx.body \
     --signing-key-file Wallet/Adr01.skey \
-    $PREPROD \
-    --out-file tx.signed
+    --signing-key-file Wallet/Adr07.skey \
+    $PREVIEW \
+    --out-file mintTx.signed
 
-cardano-cli transaction submit \
-    $PREPROD \
-    --tx-file tx.signed
+ cardano-cli transaction submit \
+    $PREVIEW \
+    --tx-file mintTx.signed

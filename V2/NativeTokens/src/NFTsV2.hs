@@ -13,39 +13,39 @@
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
 
-module NFTsV2 ( printRedeemer,
+module NFTsV2 
+  ( printRedeemer,
     serialisedScript,
     scriptSBS,
     script,
     writeSerialisedScript,
+    writeUnit
   )
 where
-
-
-import           Cardano.Api                          (PlutusScript,
-                                                       PlutusScriptV2,
-                                                       writeFileTextEnvelope)
+-- Related to Serialization  (could be in Deploy module)
+import           Cardano.Api                          (PlutusScript, PlutusScriptV2, writeFileTextEnvelope)
 import           Cardano.Api.Shelley                  (PlutusScript (..),
                                                        ScriptDataJsonSchema (ScriptDataJsonDetailedSchema),
                                                        fromPlutusData,
                                                        scriptDataToJson)
 import           Codec.Serialise
-import           Data.Aeson                           as A
-import qualified Data.ByteString.Lazy                 as LBS
-import qualified Data.ByteString.Short                as SBS
-import           Data.Functor                         (void)
+-- Related to minting policy validator code and types
 import qualified Ledger.Typed.Scripts                 as Scripts
 import           Ledger.Value                         as Value
-import qualified Plutus.Script.Utils.V2.Typed.Scripts as PSU.V2
+import qualified Plutus.Script.Utils.V2.Typed.Scripts as Utils.V2
 import qualified Plutus.V1.Ledger.Api                 as PlutusV1
 import qualified Plutus.V2.Ledger.Api                 as PlutusV2
 import           Plutus.V2.Ledger.Contexts            (ownCurrencySymbol)
 import qualified PlutusTx
-import           PlutusTx.Prelude                     as P hiding
-                                                           (Semigroup (..),
-                                                            unless, (.))
-import           Prelude                              (IO, Semigroup (..),
-                                                       Show (..), print, (.))
+import           PlutusTx.Prelude                     as Plutus hiding
+                                                           (Semigroup (..), unless, (.))
+import           Prelude                              (FilePath, IO, Semigroup (..), Show (..), print, (.))
+import           Data.Aeson                           as A
+import qualified Data.ByteString.Lazy                 as LBS
+import qualified Data.ByteString.Short                as SBS
+import           Data.Functor                         (void)
+
+
 
 data NFTParams = NFTParams --  doesn't need more than the TxOutRef
     { --mpTokenName :: !Plutus.TokenName
@@ -59,7 +59,8 @@ PlutusTx.unstableMakeIsData ''NFTParams
 
 redeemer :: NFTParams
 redeemer = NFTParams { mpAmount = 1,
-                       mpTxOutRef = PlutusV2.TxOutRef {txOutRefId = "83942cb31414d901dda39eea5509f36c7b1f68b034d5f75a2d810b7730abe21b", txOutRefIdx = 1}
+                       mpTxOutRef = PlutusV2.TxOutRef {txOutRefId = "612f766282d47b091e3c7372405a3728d752e918ea79251db456d367bbac5ddb"
+                     , txOutRefIdx = 0}
                      }
 
 printRedeemer = print $ "Redeemer: " <> A.encode (scriptDataToJson ScriptDataJsonDetailedSchema $ fromPlutusData $ PlutusV2.toData redeemer)
@@ -78,13 +79,10 @@ mkPolicy p _ ctx = traceIfFalse "UTxO not consumed"   hasUTxO           &&
 
     checkNFTAmount :: Bool
     checkNFTAmount = case Value.flattenValue (PlutusV2.txInfoMint info) of
-       [(cs, _, amt)] -> cs  == ownCurrencySymbol ctx && amt == 1
+       [(cs, tn', amt)] -> cs  == ownCurrencySymbol ctx && amt == 1
        _                -> False
 
--- && tn' == PlutusV2.TokenName "" 
-{-
-    As a Minting Policy
--}
+{- Compile into UPLC-}
 
 policy :: NFTParams -> Scripts.MintingPolicy
 policy mp = PlutusV2.mkMintingPolicyScript $
@@ -92,28 +90,28 @@ policy mp = PlutusV2.mkMintingPolicyScript $
     `PlutusTx.applyCode`
      PlutusTx.liftCode mp
   where
-    wrap mp' = PSU.V2.mkUntypedMintingPolicy $ mkPolicy mp'
+    wrap mp' = Utils.V2.mkUntypedMintingPolicy $ mkPolicy mp'
 
-{-
-    As a Script
--}
+{- As a Script -}
 
 script :: PlutusV2.Script
 script = PlutusV2.unMintingPolicyScript $ policy redeemer
 
-{-
-    As a Short Byte String
--}
+{- As a Short Byte String -}
 
 scriptSBS :: SBS.ShortByteString
 scriptSBS = SBS.toShort . LBS.toStrict $ serialise script
 
-{-
-    As a Serialised Script
--}
+{- As a Serialised Script -}
 
 serialisedScript :: PlutusScript PlutusScriptV2
 serialisedScript = PlutusScriptSerialised scriptSBS
 
 writeSerialisedScript :: IO ()
-writeSerialisedScript = void $ writeFileTextEnvelope "testnet/nft-mint-V2.plutus" Nothing serialisedScript
+writeSerialisedScript = void $ writeFileTextEnvelope "testnet/nftMintV2.plutus" Nothing serialisedScript
+
+writeJSON :: PlutusTx.ToData a => FilePath -> a -> IO ()
+writeJSON file = LBS.writeFile file . A.encode . scriptDataToJson ScriptDataJsonDetailedSchema . fromPlutusData . PlutusV2.toData
+
+writeUnit :: IO ()
+writeUnit = writeJSON "testnet/unit.json" ()
