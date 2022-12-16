@@ -57,6 +57,7 @@ data NFTParams = NFTParams --  doesn't need more than the TxOutRef
 PlutusTx.makeLift ''NFTParams
 PlutusTx.unstableMakeIsData ''NFTParams
 
+
 redeemer :: NFTParams
 redeemer = NFTParams { mpAmount = 1,
                        mpTxOutRef = PlutusV2.TxOutRef {txOutRefId = "612f766282d47b091e3c7372405a3728d752e918ea79251db456d367bbac5ddb"
